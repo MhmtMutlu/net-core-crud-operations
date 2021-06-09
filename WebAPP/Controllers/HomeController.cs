@@ -22,9 +22,16 @@ namespace WebAPP.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            var userViewModel = new UserViewModel()
+            {
+                Users = _userService.GetAll().Data
+            };
+            
+            
+            return View(userViewModel);
         }
 
         public IActionResult Privacy()
