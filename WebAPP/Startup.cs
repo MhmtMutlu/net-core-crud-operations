@@ -1,5 +1,7 @@
+using DataAccess.Concrete.EntityFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +24,11 @@ namespace WebAPP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Adding database connection
+            services.AddDbContext<UserContext>(options => options.UseNpgsql(Configuration.GetConnectionString("UserContext")));
+
             services.AddControllersWithViews();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
