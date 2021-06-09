@@ -25,11 +25,11 @@ namespace WebAPP.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            // Used UserViewModel to hold users in a list format
             var userViewModel = new UserViewModel()
             {
                 Users = _userService.GetAll().Data
             };
-            
             
             return View(userViewModel);
         }
