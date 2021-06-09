@@ -9,6 +9,10 @@ namespace DataAccess.Concrete.EntityFramework
     // DbContext is a class which is coming with EntityFramework and it allows us to do crud operations easily
     public class UserContext : DbContext
     {
+        public UserContext()
+        {
+
+        }
         // Used Npgssql and EntityFrameworkCore to create connection string for databes
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
