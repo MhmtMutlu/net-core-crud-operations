@@ -1,4 +1,10 @@
+using Business.Abstract;
+using Business.Concrete;
+using Core.DataAccess;
+using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +31,11 @@ namespace WebAPP
         public void ConfigureServices(IServiceCollection services)
         {
             // Adding database connection
-            services.AddDbContext<UserContext>(options => options.UseNpgsql(Configuration.GetConnectionString("UserContext")));
+            //services.AddDbContext<UserContext>(options => options.UseNpgsql(Configuration.GetConnectionString("UserContext")));
+            services.AddSingleton<UserContext>(new UserContext());
+
+            services.AddScoped<IUserService, UserManager>();
+            services.AddScoped<IUserDal, EfUserDal>();
 
             services.AddControllersWithViews();
             
