@@ -51,12 +51,40 @@ namespace WebAPP.Controllers
             };
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Delete(int Id)
         {
             var user = _userService.GetById(Id);
 
             _userService.Delete(user.Data);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult Update(UserModel userModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var user = _userService.GetById(userModel.Id);
+
+                if (user != null)
+                {
+                    user.Data.Name = userModel.Name;
+                    user.Data.Surname = userModel.Surname;
+                    user.Data.Email = userModel.Email;
+                    user.Data.BirthDate = userModel.BirthDate;
+                    user.Data.Phone = userModel.Phone;
+                    user.Data.Location = userModel.Location;
+                    user.Data.Photo = userModel.Photo;
+
+
+                    var result = _userService.Update(user.Data);
+                }
+
+            }
 
             return RedirectToAction(nameof(Index));
         }
