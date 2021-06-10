@@ -34,9 +34,31 @@ namespace WebAPP.Controllers
             return View(userViewModel);
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult User(int Id)
         {
-            return View();
+            var user = _userService.GetById(Id);
+            var model = new UserModel
+            {
+                Id = user.Data.Id,
+                Name = user.Data.Name,
+                Surname = user.Data.Surname,
+                Email = user.Data.Email,
+                BirthDate = user.Data.BirthDate,
+                Phone = user.Data.Phone,
+                Location = user.Data.Location,
+                Photo = user.Data.Photo
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Delete(int Id)
+        {
+            var user = _userService.GetById(Id);
+
+            _userService.Delete(user.Data);
+
+            return RedirectToAction(nameof(Index));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

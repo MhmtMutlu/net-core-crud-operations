@@ -20,15 +20,17 @@
     <tbody>
             @foreach (var user in Model.Users)
             {
-                <tr>
-                    <th scope="row">@user.Id</th>
-                    <th>@user.Name</th>
-                    <th>@user.Surname</th>
-                    <th>@user.Email</th>
-                    <th>@user.BirthDate</th>
-                    <th>@user.Phone</th>
-                    <th>@user.Location</th>
-                </tr>
+        <tr>
+            <th scope="row">@user.Id</th>
+            <th>@user.Name</th>
+            <th>@user.Surname</th>
+            <th>@user.Email</th>
+            <th>@user.BirthDate</th>
+            <th>@user.Phone</th>
+            <th>@user.Location</th>
+            <th><a class="btn btn-secondary" asp-action="User" asp-route-id="@user.Id">Details</a></th>
+            <th><a class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a></th>
+        </tr>
             }
     </tbody>
 </table>
