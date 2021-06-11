@@ -5,7 +5,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<form asp-action="Create" method="POST">
+<form asp-action="Create" method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <input type="text" asp-for="Name" class="form-control" placeholder="Name" />
     </div>
@@ -22,10 +22,12 @@
         <input type="text" asp-for="Phone" class="form-control"placeholder="Phone" />
     </div>
     <div class="form-group">
-        <input type="text" asp-for="Location" class="form-control" placeholder="Location" />
+        <textarea type="text" asp-for="Location" class="form-control" placeholder="Location" ></textarea>
     </div>
     <div class="form-group">
-        <input type="text" asp-for="Photo" class="form-control" placeholder="Photo" />
+        <label asp-for="ImageFile" class="control-label"></label> 
+        <input type="file" asp-for="ImageFile" accept="image/*"/>
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary" >Create</button>

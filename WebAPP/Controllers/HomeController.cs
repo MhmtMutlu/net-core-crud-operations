@@ -1,10 +1,12 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPP.Models;
@@ -13,14 +15,16 @@ namespace WebAPP.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         // Dependency Injection
+        private readonly ILogger<HomeController> _logger;
+        private readonly IWebHostEnvironment _hostEnvironment;
         IUserService _userService;
 
-        public HomeController(ILogger<HomeController> logger, IUserService userService)
+        public HomeController(ILogger<HomeController> logger, IUserService userService, IWebHostEnvironment hostEnvironment)
         {
             _logger = logger;
             _userService = userService;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet]
@@ -47,6 +51,17 @@ namespace WebAPP.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Save image file to wwwRoot
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(userModel.ImageFile.FileName);
+                string extension = Path.GetExtension(userModel.ImageFile.FileName);
+                userModel.Photo = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                string path = Path.Combine(wwwRootPath + "/image", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    userModel.ImageFile.CopyTo(fileStream);
+                }
+
                 var user = new User()
                 {
                     Name = userModel.Name,
@@ -66,7 +81,7 @@ namespace WebAPP.Controllers
         }
 
         [HttpGet]
-        public IActionResult User(int Id)
+        public IActionResult Update(int Id)
         {
             var user = _userService.GetById(Id);
             var model = new UserModel
@@ -86,6 +101,15 @@ namespace WebAPP.Controllers
         public IActionResult Delete(int Id)
         {
             var user = _userService.GetById(Id);
+
+            // Delete image file from wwwRoot
+            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "image", user.Data.Photo);
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+
+
             if (user != null)
             {
                 _userService.Delete(user.Data);
@@ -97,10 +121,29 @@ namespace WebAPP.Controllers
         [HttpPost]
         public IActionResult Update(UserModel userModel)
         {
-
+            
             if (ModelState.IsValid)
             {
                 var user = _userService.GetById(userModel.Id);
+
+                // Delete old image file from wwwRoot
+                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "image", user.Data.Photo);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+
+                // Update new image file to wwwRoot
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(userModel.ImageFile.FileName);
+                string extension = Path.GetExtension(userModel.ImageFile.FileName);
+                userModel.Photo = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                string path = Path.Combine(wwwRootPath + "/image", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    userModel.ImageFile.CopyTo(fileStream);
+                }
 
                 if (user != null)
                 {
