@@ -1,0 +1,23 @@
+﻿@model WebAPP.Models.UserModel
+
+<div class="d-flex justify-content-center mt-5">
+    <div class="card" style="width: 40rem; height: 20rem;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img width="100%" height="100%" src="@(" /image/" + Model.Photo)" class="card-img-top" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Name @Model.Surname</h5>
+                    <p class="card-text"><i class="fas fa-fingerprint"></i> @Model.Id</p>
+                    <p class="card-text"><i class="fas fa-envelope"></i> @Model.Email</p>
+                    <p class="card-text"><i class="fas fa-birthday-cake"></i> @Model.BirthDate</p>
+                    <p class="card-text"><i class="fas fa-mobile-alt"></i> @Model.Phone</p>
+                    <p class="card-text"><i class="fas fa-map-marker-alt"></i> @Model.Location</p>
+                    <a class="btn btn-secondary" asp-action="Update" asp-route-id="@Model.Id"><i class="fas fa-user-edit"></i></a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id"><i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

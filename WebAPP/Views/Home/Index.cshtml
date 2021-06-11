@@ -23,6 +23,7 @@
             <th>@user.Surname</th>
             <th>@user.Email</th>
             <th>
+                <a class="btn btn-outline-info" asp-action="Detail" asp-route-id="@user.Id"><i class="fas fa-info-circle"></i></a>
                 <a class="btn btn-outline-secondary" asp-action="Update" asp-route-id="@user.Id"><i class="fas fa-user-edit"></i></a>
                 <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@user.Id"><i class="fas fa-trash-alt"></i></a>
             </th>

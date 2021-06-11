@@ -98,6 +98,24 @@ namespace WebAPP.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult Detail(int Id)
+        {
+            var user = _userService.GetById(Id);
+            var model = new UserModel
+            {
+                Id = user.Data.Id,
+                Name = user.Data.Name,
+                Surname = user.Data.Surname,
+                Email = user.Data.Email,
+                BirthDate = user.Data.BirthDate,
+                Phone = user.Data.Phone,
+                Location = user.Data.Location,
+                Photo = user.Data.Photo
+            };
+            return View(model);
+        }
+
         public IActionResult Delete(int Id)
         {
             var user = _userService.GetById(Id);
