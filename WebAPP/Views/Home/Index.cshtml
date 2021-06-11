@@ -4,12 +4,10 @@
     ViewData["Title"] = "Home Page";
 }
 
-<a class="btn btn-outline-info" asp-action="Create">Create</a>
-
-<table class="table">
-    <thead>
+<table class="table table-striped table-hover">
+    <thead class="bg-secondary">
         <tr>
-            <th scope="col">Id</th>
+            <th scope="col">Photo</th>
             <th scope="col">Name</th>
             <th scope="col">Surname</th>
             <th scope="col">Email</th>
@@ -17,18 +15,20 @@
         </tr>
     </thead>
     <tbody>
-            @foreach (var user in Model.Users)
-            {
-                <tr>
-                    <th scope="row">@user.Id</th>
-                    <th>@user.Name</th>
-                    <th>@user.Surname</th>
-                    <th>@user.Email</th>
-                    <th>
-                        <a class="btn btn-secondary" asp-action="User" asp-route-id="@user.Id">Details</a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
-                    </th>
-                </tr>
-            }
+        @foreach (var user in Model.Users)
+        {
+        <tr>
+            <th scope="row"><img width="100px" height="100px" src="/image/@user.Photo" /></th>
+            <th>@user.Name</th>
+            <th>@user.Surname</th>
+            <th>@user.Email</th>
+            <th>
+                <a class="btn btn-outline-secondary" asp-action="Update" asp-route-id="@user.Id"><i class="fas fa-user-edit"></i></a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@user.Id"><i class="fas fa-trash-alt"></i></a>
+            </th>
+        </tr>
+        }
     </tbody>
 </table>
+
+<a class="btn btn-outline-success" asp-action="Create"><i class="fas fa-plus"></i></a>
