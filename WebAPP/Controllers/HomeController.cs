@@ -17,7 +17,9 @@ namespace WebAPP.Controllers
     {
         // Dependency Injection
         private readonly ILogger<HomeController> _logger;
+        // To upload image files
         private readonly IWebHostEnvironment _hostEnvironment;
+        // To reach CRUD operations
         IUserService _userService;
 
         public HomeController(ILogger<HomeController> logger, IUserService userService, IWebHostEnvironment hostEnvironment)
@@ -27,25 +29,28 @@ namespace WebAPP.Controllers
             _hostEnvironment = hostEnvironment;
         }
 
+        // Index page
         [HttpGet]
         public IActionResult Index()
         {
             // Used UserViewModel to hold users in a list format
             var userViewModel = new UserViewModel()
             {
+                // To get user's data from db
                 Users = _userService.GetAll().Data
             };
             
             return View(userViewModel);
         }
 
+        // User creation page
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-
+        // User create method
         [HttpPost]
         public IActionResult Create(UserModel userModel)
         {
@@ -62,6 +67,7 @@ namespace WebAPP.Controllers
                     userModel.ImageFile.CopyTo(fileStream);
                 }
 
+                // Creation a user to hold data which will sent to db
                 var user = new User()
                 {
                     Name = userModel.Name,
@@ -73,6 +79,7 @@ namespace WebAPP.Controllers
                     Photo = userModel.Photo
                 };
 
+                // Create user in db
                 _userService.Add(user);
 
             }
@@ -80,10 +87,14 @@ namespace WebAPP.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // User update page
         [HttpGet]
         public IActionResult Update(int Id)
         {
+            // Find user whose Id matches int Id
             var user = _userService.GetById(Id);
+
+            // Holding user's data in model to show
             var model = new UserModel
             {
                 Id = user.Data.Id,
@@ -98,10 +109,14 @@ namespace WebAPP.Controllers
             return View(model);
         }
 
+        // User details page
         [HttpGet]
         public IActionResult Detail(int Id)
         {
+            // Find user whose Id matches int Id
             var user = _userService.GetById(Id);
+
+            // Holding user's data in model to show
             var model = new UserModel
             {
                 Id = user.Data.Id,
@@ -116,8 +131,10 @@ namespace WebAPP.Controllers
             return View(model);
         }
 
+        // User delete method
         public IActionResult Delete(int Id)
         {
+            // Find user whose Id matches int Id
             var user = _userService.GetById(Id);
 
             // Delete image file from wwwRoot
@@ -127,7 +144,7 @@ namespace WebAPP.Controllers
                 System.IO.File.Delete(imagePath);
             }
 
-
+            // Delete from data
             if (user != null)
             {
                 _userService.Delete(user.Data);
@@ -136,12 +153,14 @@ namespace WebAPP.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // User update method
         [HttpPost]
         public IActionResult Update(UserModel userModel)
         {
             
             if (ModelState.IsValid)
             {
+                // Find user whose Id matches int Id
                 var user = _userService.GetById(userModel.Id);
 
                 // Delete old image file from wwwRoot
@@ -163,6 +182,7 @@ namespace WebAPP.Controllers
                     userModel.ImageFile.CopyTo(fileStream);
                 }
 
+                // Taking data from userModel to save changes in db
                 if (user != null)
                 {
                     user.Data.Name = userModel.Name;
@@ -173,7 +193,7 @@ namespace WebAPP.Controllers
                     user.Data.Location = userModel.Location;
                     user.Data.Photo = userModel.Photo;
 
-
+                    // Update data where come from userModel
                     var result = _userService.Update(user.Data);
                 }
 
