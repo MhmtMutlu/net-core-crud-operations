@@ -4,6 +4,7 @@
     ViewData["Title"] = "Home Page";
 }
 
+<a class="btn btn-outline-info" asp-action="Create">Create</a>
 
 <table class="table">
     <thead>
@@ -12,25 +13,22 @@
             <th scope="col">Name</th>
             <th scope="col">Surname</th>
             <th scope="col">Email</th>
-            <th scope="col">Birth Date</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Location</th>
+            <th scope="col">Operations</th>
         </tr>
     </thead>
     <tbody>
             @foreach (var user in Model.Users)
             {
-        <tr>
-            <th scope="row">@user.Id</th>
-            <th>@user.Name</th>
-            <th>@user.Surname</th>
-            <th>@user.Email</th>
-            <th>@user.BirthDate</th>
-            <th>@user.Phone</th>
-            <th>@user.Location</th>
-            <th><a class="btn btn-secondary" asp-action="User" asp-route-id="@user.Id">Details</a></th>
-            <th><a class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a></th>
-        </tr>
+                <tr>
+                    <th scope="row">@user.Id</th>
+                    <th>@user.Name</th>
+                    <th>@user.Surname</th>
+                    <th>@user.Email</th>
+                    <th>
+                        <a class="btn btn-secondary" asp-action="User" asp-route-id="@user.Id">Details</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                    </th>
+                </tr>
             }
     </tbody>
 </table>
