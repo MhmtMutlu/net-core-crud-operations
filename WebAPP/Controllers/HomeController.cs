@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -35,6 +36,36 @@ namespace WebAPP.Controllers
         }
 
         [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult Create(UserModel userModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User()
+                {
+                    Name = userModel.Name,
+                    Surname = userModel.Surname,
+                    Email = userModel.Email,
+                    BirthDate = userModel.BirthDate,
+                    Phone = userModel.Phone,
+                    Location = userModel.Location,
+                    Photo = userModel.Photo
+                };
+
+                _userService.Add(user);
+
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
         public IActionResult User(int Id)
         {
             var user = _userService.GetById(Id);
@@ -52,12 +83,13 @@ namespace WebAPP.Controllers
             return View(model);
         }
 
-        [HttpPost]
         public IActionResult Delete(int Id)
         {
             var user = _userService.GetById(Id);
-
-            _userService.Delete(user.Data);
+            if (user != null)
+            {
+                _userService.Delete(user.Data);
+            }
 
             return RedirectToAction(nameof(Index));
         }
