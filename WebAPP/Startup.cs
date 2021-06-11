@@ -34,6 +34,7 @@ namespace WebAPP
             //services.AddDbContext<UserContext>(options => options.UseNpgsql(Configuration.GetConnectionString("UserContext")));
             services.AddSingleton<UserContext>(new UserContext());
 
+            // Defining classes and interfaces to project
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IUserDal, EfUserDal>();
 
@@ -58,6 +59,7 @@ namespace WebAPP
 
             app.UseAuthorization();
 
+            // Page URLs
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
