@@ -163,24 +163,30 @@ namespace WebAPP.Controllers
                 // Find user whose Id matches int Id
                 var user = _userService.GetById(userModel.Id);
 
-                // Delete old image file from wwwRoot
-                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "image", user.Data.Photo);
-                if (System.IO.File.Exists(imagePath))
+                // Checking if an image uploaded to update or not
+                if(userModel.ImageFile != null)
                 {
-                    System.IO.File.Delete(imagePath);
-                }
+                    // Delete old image file from wwwRoot
+                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "image", user.Data.Photo);
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
 
 
-                // Update new image file to wwwRoot
-                string wwwRootPath = _hostEnvironment.WebRootPath;
-                string fileName = Path.GetFileNameWithoutExtension(userModel.ImageFile.FileName);
-                string extension = Path.GetExtension(userModel.ImageFile.FileName);
-                userModel.Photo = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                string path = Path.Combine(wwwRootPath + "/image", fileName);
-                using (var fileStream = new FileStream(path, FileMode.Create))
-                {
-                    userModel.ImageFile.CopyTo(fileStream);
+                    // Update new image file to wwwRoot
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
+                    string fileName = Path.GetFileNameWithoutExtension(userModel.ImageFile.FileName);
+                    string extension = Path.GetExtension(userModel.ImageFile.FileName);
+                    userModel.Photo = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string path = Path.Combine(wwwRootPath + "/image", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        userModel.ImageFile.CopyTo(fileStream);
+                    }
                 }
+
+                
 
                 // Taking data from userModel to save changes in db
                 if (user != null)
@@ -191,7 +197,11 @@ namespace WebAPP.Controllers
                     user.Data.BirthDate = userModel.BirthDate;
                     user.Data.Phone = userModel.Phone;
                     user.Data.Location = userModel.Location;
-                    user.Data.Photo = userModel.Photo;
+                    if(userModel.Photo != null)
+                    {
+                        user.Data.Photo = userModel.Photo;
+                    }
+                    user.Data.Photo = user.Data.Photo;
 
                     // Update data where come from userModel
                     var result = _userService.Update(user.Data);
